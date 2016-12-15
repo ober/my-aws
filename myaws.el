@@ -707,3 +707,17 @@
 ;; restore-db-instance-from-db-snapshot
 ;; restore-db-instance-to-point-in-time
 ;; revoke-db-security-group-ingress
+
+(defun remote-term (new-buffer-name cmd &rest switches)
+  (setq term-ansi-buffer-name (concat "*" new-buffer-name "*"))
+  (setq term-ansi-buffer-name (generate-new-buffer-name term-ansi-buffer-name))
+  (setq term-ansi-buffer-name (apply 'make-term term-ansi-buffer-name cmd nil switches))
+  (set-buffer term-ansi-buffer-name)
+  (term-mode)
+  (term-char-mode)
+  ;;(term-set-escape-char ?\C-x)
+  (switch-to-buffer term-ansi-buffer-name))
+
+(defun remote-ssh (ip name)
+  (interactive)
+  (remote-term name "ssh" (format "ubuntu@%s" ip)))
